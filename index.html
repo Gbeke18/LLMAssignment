@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>LLM Q&A Web GUI</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>LLM Q&A</h1>
+    <form method="post" action="{{ url_for('index') }}">
+      <label for="question">Enter your question</label>
+      <textarea id="question" name="question" required rows="3" placeholder="Type a question...">{{ question }}</textarea>
+      <button type="submit">Ask</button>
+    </form>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% if messages %}
+        <div class="flash">
+        {% for category, msg in messages %}
+          <div class="flash-item {{ category }}">{{ msg }}</div>
+        {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+
+    {% if processed %}
+      <section class="panel">
+        <h2>Processed Question</h2>
+        <p><strong>Original:</strong> {{ processed.original }}</p>
+        <p><strong>Processed:</strong> {{ processed.processed }}</p>
+        <p><strong>Tokens:</strong> {{ processed.tokens | join(', ') }}</p>
+      </section>
+    {% endif %}
+
+    {% if answer %}
+      <section class="panel">
+        <h2>LLM Answer</h2>
+        <pre class="answer">{{ answer }}</pre>
+      </section>
+    {% endif %}
+
+    <footer>
+      <small>Built for Project 2 — Q&A system with CLI + Web GUI</small>
+    </footer>
+  </div>
+</body>
+</html>
